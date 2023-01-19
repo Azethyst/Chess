@@ -58,7 +58,9 @@ body {
 }
 
 .square:hover {
-  border-color:blue;
+  background-color: purple;
+  border-color:red;
+  border: 20px;
 }
 
 .w-sq {
@@ -80,4 +82,11 @@ body {
 i {
   font-size: 50px;
   color: var(--bg-black-900);
+}
+
+.selected {
+  font-size: 80px;
+  /* padding-left: 10px; */
+  position: absolute;
+  text-align:left ;
 }
