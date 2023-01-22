@@ -288,10 +288,18 @@ class BOARD {
         if (vir_square.getColor() == "black") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none" &&
-            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
+            this.getBoardSquare(vir_id).getColor() == "none"
           ) {
-            this.getBoardSquare(vir_id).toggleMoves();
+            if (
+              this.checkMoveValid(
+                vir_square,
+                vir_id,
+                "white",
+                this.blackKingPos
+              )
+            ) {
+              this.getBoardSquare(vir_id).toggleMoves();
+            }
           } else if (
             this.isValidSquare(vir_id) &&
             this.getBoardSquare(vir_id).getColor() == "white" &&
@@ -305,10 +313,18 @@ class BOARD {
         } else if (vir_square.getColor() == "white") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none" &&
-            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
+            this.getBoardSquare(vir_id).getColor() == "none"
           ) {
-            this.getBoardSquare(vir_id).toggleMoves();
+            if (
+              this.checkMoveValid(
+                vir_square,
+                vir_id,
+                "black",
+                this.whiteKingPos
+              )
+            ) {
+              this.getBoardSquare(vir_id).toggleMoves();
+            }
           } else if (
             this.isValidSquare(vir_id) &&
             this.getBoardSquare(vir_id).getColor() == "black" &&
@@ -341,10 +357,18 @@ class BOARD {
         if (vir_square.getColor() == "black") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none" &&
-            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
+            this.getBoardSquare(vir_id).getColor() == "none"
           ) {
-            this.getBoardSquare(vir_id).toggleMoves();
+            if (
+              this.checkMoveValid(
+                vir_square,
+                vir_id,
+                "white",
+                this.blackKingPos
+              )
+            ) {
+              this.getBoardSquare(vir_id).toggleMoves();
+            }
           } else if (
             this.isValidSquare(vir_id) &&
             this.getBoardSquare(vir_id).getColor() == "white" &&
@@ -358,10 +382,18 @@ class BOARD {
         } else if (vir_square.getColor() == "white") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none" &&
-            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
+            this.getBoardSquare(vir_id).getColor() == "none"
           ) {
-            this.getBoardSquare(vir_id).toggleMoves();
+            if (
+              this.checkMoveValid(
+                vir_square,
+                vir_id,
+                "black",
+                this.whiteKingPos
+              )
+            ) {
+              this.getBoardSquare(vir_id).toggleMoves();
+            }
           } else if (
             this.isValidSquare(vir_id) &&
             this.getBoardSquare(vir_id).getColor() == "black" &&
@@ -648,27 +680,14 @@ class BOARD {
   checkMoveValid(vir_square, targetSquare, opponentColor, kingPos) {
     this.getBoardSquare(targetSquare).setTempColor(vir_square.getColor());
     vir_square.setTempColor("none");
-
-    if (opponentColor == "black") {
-      if (this.isSquareChecked(kingPos, opponentColor)) {
-        this.getBoardSquare(targetSquare).resetTempColor();
-        vir_square.resetTempColor();
-        return false;
-      } else {
-        this.getBoardSquare(targetSquare).resetTempColor();
-        vir_square.resetTempColor();
-        return true;
-      }
-    } else if (opponentColor == "white") {
-      if (this.isSquareChecked(kingPos, opponentColor)) {
-        this.getBoardSquare(targetSquare).resetTempColor();
-        vir_square.resetTempColor();
-        return false;
-      } else {
-        this.getBoardSquare(targetSquare).resetTempColor();
-        vir_square.resetTempColor();
-        return true;
-      }
+    if (this.isSquareChecked(kingPos, opponentColor)) {
+      this.getBoardSquare(targetSquare).resetTempColor();
+      vir_square.resetTempColor();
+      return false;
+    } else {
+      this.getBoardSquare(targetSquare).resetTempColor();
+      vir_square.resetTempColor();
+      return true;
     }
   }
 }
