@@ -1,9 +1,12 @@
-const players = ["white", "black"];
 var turn = false; // false = white, true = black
 
 const board = document.querySelector(".board");
 const squareList = board.querySelectorAll(".square");
 const squareTotalNum = squareList.length;
+const blackSquareList = board.querySelectorAll(".black");
+const blackSquareTotal = blackSquareList.length;
+const whiteSquareList = board.querySelectorAll(".white");
+const whiteSquareTotal = whiteSquareList.length;
 var lastSelection; // the square currently selected
 var init = 1;
 
@@ -52,49 +55,68 @@ function selectorControl(square, color) {
 function pieceMovement(square, color) {
   const piece = square.querySelector("i").classList[1].substring(9);
   console.log(piece);
-  if (piece == "pawn" && color == "black") {                 // white pawn
+  if (piece == "pawn" && color == "black") {
+    // white pawn
     const id = square.id;
     const left_id = +id[0] - 1 + " " + (+id[2] - 1);
     const right_id = +id[0] + 1 + " " + (+id[2] - 1);
     const forward_id = +id[0] + " " + (+id[2] - 1);
     const jump_id = +id[0] + " " + (+id[2] - 2);
-    if (isValidSquare(forward_id) && !hasColor(forward_id, "black") && !hasColor(forward_id, "white")) {
+    if (
+      isValidSquare(forward_id) &&
+      !hasColor(forward_id, "black") &&
+      !hasColor(forward_id, "white")
+    ) {
       document.getElementById(forward_id).classList.toggle("moves");
 
       if (id[2] == "7") {
-        if (isValidSquare(jump_id) && !hasColor(jump_id, "white") && !hasColor(jump_id, "black")) {
+        if (
+          isValidSquare(jump_id) &&
+          !hasColor(jump_id, "white") &&
+          !hasColor(jump_id, "black")
+        ) {
           document.getElementById(jump_id).classList.toggle("moves");
         }
       }
     }
-    if (isValidSquare(left_id) && hasColor(left_id,"white")) {
+    if (isValidSquare(left_id) && hasColor(left_id, "white")) {
       document.getElementById(left_id).classList.toggle("moves");
     }
-    if (isValidSquare(right_id) && hasColor(right_id,"white")) {
+    if (isValidSquare(right_id) && hasColor(right_id, "white")) {
       document.getElementById(right_id).classList.toggle("moves");
     }
-  } else if (piece == "pawn" && color == "white") {         // black pawn
+  } else if (piece == "pawn" && color == "white") {
+    // black pawn
     const id = square.id;
     const left_id = +id[0] - 1 + " " + (+id[2] + 1);
     const right_id = +id[0] + 1 + " " + (+id[2] + 1);
     const forward_id = +id[0] + " " + (+id[2] + 1);
     const jump_id = +id[0] + " " + (+id[2] + 2);
-    if (isValidSquare(forward_id) && !hasColor(forward_id, "white") && !hasColor(forward_id, "black")) {
+    if (
+      isValidSquare(forward_id) &&
+      !hasColor(forward_id, "white") &&
+      !hasColor(forward_id, "black")
+    ) {
       document.getElementById(forward_id).classList.toggle("moves");
 
       if (id[2] == "2") {
-        if (isValidSquare(jump_id) && !hasColor(jump_id, "black") && !hasColor(jump_id, "white")) {
+        if (
+          isValidSquare(jump_id) &&
+          !hasColor(jump_id, "black") &&
+          !hasColor(jump_id, "white")
+        ) {
           document.getElementById(jump_id).classList.toggle("moves");
         }
       }
     }
-    if (isValidSquare(left_id) && hasColor(left_id,"black")) {
+    if (isValidSquare(left_id) && hasColor(left_id, "black")) {
       document.getElementById(left_id).classList.toggle("moves");
     }
-    if (isValidSquare(right_id) && hasColor(right_id,"black")) {
+    if (isValidSquare(right_id) && hasColor(right_id, "black")) {
       document.getElementById(right_id).classList.toggle("moves");
     }
-  } else if (piece == "knight") {                            // knight
+  } else if (piece == "knight") {
+    // knight
     const id = square.id;
     const ids = [
       +id[0] + 1 + " " + (+id[2] + 2),
@@ -106,7 +128,7 @@ function pieceMovement(square, color) {
       +id[0] - 2 + " " + (+id[2] + 1),
       +id[0] - 1 + " " + (+id[2] + 2),
     ];
-    for (let i = 0; i < ids.length; i++) {        
+    for (let i = 0; i < ids.length; i++) {
       if (color == "black") {
         if (isValidSquare(ids[i]) && !hasColor(ids[i], "black")) {
           document.getElementById(ids[i]).classList.toggle("moves");
@@ -115,9 +137,10 @@ function pieceMovement(square, color) {
         if (isValidSquare(ids[i]) && !hasColor(ids[i], "white")) {
           document.getElementById(ids[i]).classList.toggle("moves");
         }
-      }   
+      }
     }
-  } else if (piece == "bishop") {                            // bishop
+  } else if (piece == "bishop") {
+    // bishop
     for (let i = 0; i < 4; i++) {
       var en_seq = true;
       var id = square.id;
@@ -152,7 +175,8 @@ function pieceMovement(square, color) {
         }
       }
     }
-  } else if (piece == "rook") {                              // rook
+  } else if (piece == "rook") {
+    // rook
     for (let i = 0; i < 4; i++) {
       var en_seq = true;
       var id = square.id;
@@ -187,7 +211,8 @@ function pieceMovement(square, color) {
         }
       }
     }
-  } else if (piece == "king") {                             // king
+  } else if (piece == "king") {
+    // king
     const id = square.id;
     const ids = [
       +id[0] + 1 + " " + +id[2],
@@ -208,9 +233,10 @@ function pieceMovement(square, color) {
         if (isValidSquare(ids[i]) && !hasColor(ids[i], "white")) {
           document.getElementById(ids[i]).classList.toggle("moves");
         }
-      }   
+      }
     }
-  } else if (piece == "queen") {                             // queen
+  } else if (piece == "queen") {
+    // queen
     // N, S, W, E
     for (let i = 0; i < 4; i++) {
       var en_seq = true;
@@ -284,7 +310,6 @@ function pieceMovement(square, color) {
   }
 }
 
-
 /** removes all the "moves" class of all the squares in the board */
 function removeMoves() {
   for (let i = 0; i < squareTotalNum; i++) {
@@ -322,18 +347,27 @@ function movePiece(square) {
   lastSelection.classList.remove("selected");
 
   // remove the piece thats being eaten if the piece exists
-  if (square.classList.contains("black") || square.classList.contains("white")) {
+  if (
+    square.classList.contains("black") ||
+    square.classList.contains("white")
+  ) {
     square.classList.remove(square.classList[2]);
-    square.querySelector("i").classList.remove(square.querySelector("i").classList[1]);
+    square
+      .querySelector("i")
+      .classList.remove(square.querySelector("i").classList[1]);
   }
 
   // shift th piece to the targeted square
   square.classList.add(lastSelection.classList[2]);
-  square.querySelector("i").classList.add(lastSelection.querySelector("i").classList[1]);
+  square
+    .querySelector("i")
+    .classList.add(lastSelection.querySelector("i").classList[1]);
 
   // remove the piece from its original square
   lastSelection.classList.remove(lastSelection.classList[2]);
-  lastSelection.querySelector("i").classList.remove(lastSelection.querySelector("i").classList[1]);
+  lastSelection
+    .querySelector("i")
+    .classList.remove(lastSelection.querySelector("i").classList[1]);
 
   lastSelection = null;
   init = 1;
@@ -345,5 +379,210 @@ function movePiece(square) {
   } else {
     document.getElementById("w-span").classList.remove("hidden");
     document.getElementById("b-span").classList.add("hidden");
+  }
+}
+
+function isChecked(color) {}
+
+/** return true if the white king is visible by any of the black pieces */
+function isWhiteKingVisible(blackSquareList, blackSquareTotal) {
+  for (let i = 0; i < blackSquareTotal; i++) {
+    const square = blackSquareList[i];
+    const piece = square.querySelector("i").classList[1].substring(9);
+    const id = square.id;
+
+    if (piece == "pawn") {
+      const left_id = +id[0] - 1 + " " + (+id[2] - 1);
+      const right_id = +id[0] + 1 + " " + (+id[2] - 1);
+      if (isValidSquare(left_id) && hasColor(left_id, "white")) {
+        if (
+          document.getElementById(left_id).classList[1].substring(9) == "king"
+        ) {
+          return true;
+        }
+      }
+      if (isValidSquare(right_id) && hasColor(right_id, "white")) {
+        if (
+          document.getElementById(right_id).classList[1].substring(9) == "king"
+        ) {
+          return true;
+        }
+      }
+    } else if (piece == "knight") {
+      const ids = [
+        +id[0] + 1 + " " + (+id[2] + 2),
+        +id[0] + 2 + " " + (+id[2] + 1),
+        +id[0] + 2 + " " + (+id[2] - 1),
+        +id[0] + 1 + " " + (+id[2] - 2),
+        +id[0] - 1 + " " + (+id[2] - 2),
+        +id[0] - 2 + " " + (+id[2] - 1),
+        +id[0] - 2 + " " + (+id[2] + 1),
+        +id[0] - 1 + " " + (+id[2] + 2),
+      ];
+      for (let i = 0; i < ids.length; i++) {
+        if (isValidSquare(ids[i]) && hasColor(ids[i], "white")) {
+          if (
+            document.getElementById(ids[i]).classList[1].substring(9) == "king"
+          ) {
+            return true;
+          }
+        }
+      }
+    } else if (piece == "bishop") {
+      // bishop
+      for (let i = 0; i < 4; i++) {
+        var en_seq = true;
+        var id_rec = "${id}";
+        while (en_seq) {
+          if (i == 0) {
+            id_rec = +id_rec[0] + 1 + " " + (+id_rec[2] + 1);
+          } else if (i == 1) {
+            id_rec = +id_rec[0] + 1 + " " + (+id_rec[2] - 1);
+          } else if (i == 2) {
+            id_rec = +id_rec[0] - 1 + " " + (+id_rec[2] - 1);
+          } else {
+            id_rec = +id_rec[0] - 1 + " " + (+id_rec[2] + 1);
+          }
+
+          if (isValidSquare(id_rec) && !hasColor(id_rec, "black")) {
+            en_seq = true;
+          } else if (isValidSquare(id_rec) && hasColor(id_rec, "white")) {
+            en_seq = false;
+            if (
+              document.getElementById(id_rec).classList[1].substring(9) ==
+              "king"
+            ) {
+              return true;
+            }
+          } else {
+            en_seq = false;
+          }
+        }
+      }
+    } else if (piece == "rook") {
+      // rook
+      for (let i = 0; i < 4; i++) {
+        var en_seq = true;
+        var id_rec = "${id}";
+        while (en_seq) {
+          if (i == 0) {
+            id_rec = +id_rec[0] + " " + (+id_rec[2] + 1);
+          } else if (i == 1) {
+            id_rec = +id_rec[0] + 1 + " " + +id_rec[2];
+          } else if (i == 2) {
+            id_rec = +id_rec[0] + " " + (+id_rec[2] - 1);
+          } else {
+            id_rec = +id_rec[0] - 1 + " " + +id_rec[2];
+          }
+          if (isValidSquare(id_rec) && !hasColor(id_rec, "black")) {
+            en_seq = true;
+          } else if (isValidSquare(id_rec) && hasColor(id_rec, "white")) {
+            en_seq = false;
+            if (
+              document.getElementById(id_rec).classList[1].substring(9) ==
+              "king"
+            ) {
+              return true;
+            }
+          } else {
+            en_seq = false;
+          }
+        }
+      }
+    } else if (piece == "king") {
+      const ids = [
+        +id[0] + 1 + " " + +id[2],
+        +id[0] + 1 + " " + (+id[2] + 1),
+        +id[0] + " " + (+id[2] + 1),
+        +id[0] - 1 + " " + (+id[2] + 1),
+        +id[0] - 1 + " " + +id[2],
+        +id[0] - 1 + " " + (+id[2] - 1),
+        +id[0] + " " + (+id[2] - 1),
+        +id[0] + 1 + " " + (+id[2] - 1),
+      ];
+      for (let i = 0; i < ids.length; i++) {
+        if (color == "black") {
+          if (isValidSquare(ids[i]) && !hasColor(ids[i], "black")) {
+            document.getElementById(ids[i]).classList.toggle("moves");
+          }
+        } else if (color == "white") {
+          if (isValidSquare(ids[i]) && !hasColor(ids[i], "white")) {
+            document.getElementById(ids[i]).classList.toggle("moves");
+          }
+        }
+      }
+    } else if (piece == "queen") {
+      // queen
+      // N, S, W, E
+      for (let i = 0; i < 4; i++) {
+        var en_seq = true;
+        var id = square.id;
+        while (en_seq) {
+          if (i == 0) {
+            id = +id[0] + " " + (+id[2] + 1);
+          } else if (i == 1) {
+            id = +id[0] + 1 + " " + +id[2];
+          } else if (i == 2) {
+            id = +id[0] + " " + (+id[2] - 1);
+          } else {
+            id = +id[0] - 1 + " " + +id[2];
+          }
+          if (color == "black") {
+            if (isValidSquare(id) && !hasColor(id, "black")) {
+              document.getElementById(id).classList.toggle("moves");
+            } else if (isValidSquare(id) && hasColor(id, "white")) {
+              document.getElementById(id).classList.toggle("moves");
+              en_seq = false;
+            } else {
+              en_seq = false;
+            }
+          } else if (color == "white") {
+            if (isValidSquare(id) && !hasColor(id, "white")) {
+              document.getElementById(id).classList.toggle("moves");
+            } else if (isValidSquare(id) && hasColor(id, "black")) {
+              document.getElementById(id).classList.toggle("moves");
+              en_seq = false;
+            } else {
+              en_seq = false;
+            }
+          }
+        }
+      }
+      // NW, NE, SW, SE
+      for (let i = 0; i < 4; i++) {
+        var en_seq = true;
+        var id = square.id;
+        while (en_seq) {
+          if (i == 0) {
+            id = +id[0] + 1 + " " + (+id[2] + 1);
+          } else if (i == 1) {
+            id = +id[0] + 1 + " " + (+id[2] - 1);
+          } else if (i == 2) {
+            id = +id[0] - 1 + " " + (+id[2] - 1);
+          } else {
+            id = +id[0] - 1 + " " + (+id[2] + 1);
+          }
+          if (color == "black") {
+            if (isValidSquare(id) && !hasColor(id, "black")) {
+              document.getElementById(id).classList.toggle("moves");
+            } else if (isValidSquare(id) && hasColor(id, "white")) {
+              document.getElementById(id).classList.toggle("moves");
+              en_seq = false;
+            } else {
+              en_seq = false;
+            }
+          } else if (color == "white") {
+            if (isValidSquare(id) && !hasColor(id, "white")) {
+              document.getElementById(id).classList.toggle("moves");
+            } else if (isValidSquare(id) && hasColor(id, "black")) {
+              document.getElementById(id).classList.toggle("moves");
+              en_seq = false;
+            } else {
+              en_seq = false;
+            }
+          }
+        }
+      }
+    }
   }
 }

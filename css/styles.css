@@ -55,7 +55,7 @@ body {
 
 .square {
   height: 80px;
-  flex: 0 0 12.5%;
+  width: 80px;
   margin: 0;
   padding: 14px;
   text-align: center;
@@ -63,11 +63,11 @@ body {
 }
 
 .square:hover {
-  border: 1px solid blue;
+  border: 1px solid white;
 }
 
 .container1 {
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: wheat;
@@ -78,7 +78,6 @@ body {
   position: relative;
   border-radius: 40%;
   border: 10px solid cadetblue;
-
 }
 
 .container1 h1 {
@@ -132,5 +131,14 @@ i {
 }
 
 .moves {
-  background-color: rgb(227, 190, 245);
+  position: absolute;
+  margin: 0;
+  top: 25px;
+  left: 25px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px dotted grey;
+  opacity: 0.5;
+  background-color: grey;
 }
