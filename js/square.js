@@ -5,6 +5,7 @@ class SQUARE {
     this.square = document.getElementById(this.xIndex + " " + this.yIndex);
     this.selected = false;
     this.moves = false;
+    this.prevColor = null;
 
     // color => "black", "white", "none"
     this.color = color;
@@ -40,6 +41,16 @@ class SQUARE {
 
   getYindex() {
     return this.yIndex;
+  }
+
+  setTempColor(tempColor) {
+    this.prevColor = this.color;
+    this.color = tempColor;
+  }
+
+  resetTempColor() {
+    this.color = this.prevColor;
+    this.prevColor = null;
   }
 
   setColor(newColor) {

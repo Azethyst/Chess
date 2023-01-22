@@ -118,7 +118,7 @@ i {
 
 .selected {
   padding: 0;
-  border: 3px solid rgb(227, 190, 245);
+  border: 3px solid white;
   text-align: center;
   z-index: 4;
 }

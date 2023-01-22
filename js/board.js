@@ -107,16 +107,44 @@ class BOARD {
   ) {
     this.board = board;
     this.selected = selected;
+    this.blackKingPos = [5, 8];
+    this.whiteKingPos = [5, 1];
+    this.turn = true; // white = true, black = false
   }
 
   getBoardSquare(arr) {
     return this.board[arr[0] - 1][arr[1] - 1];
   }
 
+  control(arr) {
+    if (
+      (this.turn && this.getBoardSquare(arr).getColor() == "white") ||
+      this.getBoardSquare(arr).hasMoves()
+    ) {
+      this.setSelected(arr);
+    } else if (
+      (!this.turn && this.getBoardSquare(arr).getColor() == "black") ||
+      this.getBoardSquare(arr).hasMoves()
+    ) {
+      this.setSelected(arr);
+    }
+    return this.turn;
+  }
+
   setSelected(arr) {
     if (this.getBoardSquare(arr).hasMoves()) {
+      if (this.getBoardSquare(this.selected).getPiece() == "king") {
+        if (this.getBoardSquare(this.selected).getColor() == "black") {
+          this.blackKingPos[0] = arr[0];
+          this.blackKingPos[1] = arr[1];
+        } else {
+          this.whiteKingPos[0] = arr[0];
+          this.whiteKingPos[1] = arr[1];
+        }
+      }
       this.getBoardSquare(arr).movePiece(this.getBoardSquare(this.selected));
       this.removeSelected();
+      this.turn = !this.turn;
     } else if (this.selected == null) {
       this.selected = arr;
       this.getBoardSquare(arr).toggleSelected();
@@ -162,6 +190,7 @@ class BOARD {
       var forward = [vir_square.getXindex(), vir_square.getYindex() - 1];
       var jump = [vir_square.getXindex(), vir_square.getYindex() - 2];
       var oppColor = "white";
+      var tempKingPos = this.blackKingPos;
       var initRow = 7;
     } else if (vir_square.getColor() == "white") {
       var left = [vir_square.getXindex() - 1, vir_square.getYindex() + 1];
@@ -169,6 +198,7 @@ class BOARD {
       var forward = [vir_square.getXindex(), vir_square.getYindex() + 1];
       var jump = [vir_square.getXindex(), vir_square.getYindex() + 2];
       var oppColor = "black";
+      var tempKingPos = this.whiteKingPos;
       var initRow = 2;
     }
 
@@ -177,13 +207,16 @@ class BOARD {
       this.getBoardSquare(forward).getColor() != "black" &&
       this.getBoardSquare(forward).getColor() != "white"
     ) {
-      this.getBoardSquare(forward).toggleMoves();
+      if (this.checkMoveValid(vir_square, forward, oppColor, tempKingPos)) {
+        this.getBoardSquare(forward).toggleMoves();
+      }
 
       if (vir_square.getYindex() == initRow) {
         if (
           this.isValidSquare(jump) &&
           this.getBoardSquare(jump).getColor() != "black" &&
-          this.getBoardSquare(jump).getColor() != "white"
+          this.getBoardSquare(jump).getColor() != "white" &&
+          this.checkMoveValid(vir_square, jump, oppColor, tempKingPos)
         ) {
           this.getBoardSquare(jump).toggleMoves();
         }
@@ -191,13 +224,15 @@ class BOARD {
     }
     if (
       this.isValidSquare(left) &&
-      this.getBoardSquare(left).getColor() == oppColor
+      this.getBoardSquare(left).getColor() == oppColor &&
+      this.checkMoveValid(vir_square, left, oppColor, tempKingPos)
     ) {
       this.getBoardSquare(left).toggleMoves();
     }
     if (
       this.isValidSquare(right) &&
-      this.getBoardSquare(right).getColor() == oppColor
+      this.getBoardSquare(right).getColor() == oppColor &&
+      this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
     ) {
       this.getBoardSquare(right).toggleMoves();
     }
@@ -218,14 +253,16 @@ class BOARD {
       if (vir_square.getColor() == "black") {
         if (
           this.isValidSquare(jumps[i]) &&
-          this.getBoardSquare(jumps[i]).getColor() != "black"
+          this.getBoardSquare(jumps[i]).getColor() != "black" &&
+          this.checkMoveValid(vir_square, jumps[i], "white", this.blackKingPos)
         ) {
           this.getBoardSquare(jumps[i]).toggleMoves();
         }
       } else if (vir_square.getColor() == "white") {
         if (
           this.isValidSquare(jumps[i]) &&
-          this.getBoardSquare(jumps[i]).getColor() != "white"
+          this.getBoardSquare(jumps[i]).getColor() != "white" &&
+          this.checkMoveValid(vir_square, jumps[i], "black", this.whiteKingPos)
         ) {
           this.getBoardSquare(jumps[i]).toggleMoves();
         }
@@ -251,12 +288,14 @@ class BOARD {
         if (vir_square.getColor() == "black") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none"
+            this.getBoardSquare(vir_id).getColor() == "none" &&
+            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
           } else if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "white"
+            this.getBoardSquare(vir_id).getColor() == "white" &&
+            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
             en_seq = false;
@@ -266,12 +305,14 @@ class BOARD {
         } else if (vir_square.getColor() == "white") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none"
+            this.getBoardSquare(vir_id).getColor() == "none" &&
+            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
           } else if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "black"
+            this.getBoardSquare(vir_id).getColor() == "black" &&
+            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
           ) {
             en_seq = false;
             this.getBoardSquare(vir_id).toggleMoves();
@@ -300,12 +341,14 @@ class BOARD {
         if (vir_square.getColor() == "black") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none"
+            this.getBoardSquare(vir_id).getColor() == "none" &&
+            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
           } else if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "white"
+            this.getBoardSquare(vir_id).getColor() == "white" &&
+            this.checkMoveValid(vir_square, vir_id, "white", this.blackKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
             en_seq = false;
@@ -315,12 +358,14 @@ class BOARD {
         } else if (vir_square.getColor() == "white") {
           if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "none"
+            this.getBoardSquare(vir_id).getColor() == "none" &&
+            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
           } else if (
             this.isValidSquare(vir_id) &&
-            this.getBoardSquare(vir_id).getColor() == "black"
+            this.getBoardSquare(vir_id).getColor() == "black" &&
+            this.checkMoveValid(vir_square, vir_id, "black", this.whiteKingPos)
           ) {
             this.getBoardSquare(vir_id).toggleMoves();
             en_seq = false;
@@ -347,14 +392,16 @@ class BOARD {
       if (vir_square.getColor() == "black") {
         if (
           this.isValidSquare(steps[i]) &&
-          this.getBoardSquare(steps[i]).getColor() != "black"
+          this.getBoardSquare(steps[i]).getColor() != "black" &&
+          this.checkMoveValid(vir_square, steps[i], "white", steps[i])
         ) {
           this.getBoardSquare(steps[i]).toggleMoves();
         }
       } else if (vir_square.getColor() == "white") {
         if (
           this.isValidSquare(steps[i]) &&
-          this.getBoardSquare(steps[i]).getColor() != "white"
+          this.getBoardSquare(steps[i]).getColor() != "white" &&
+          this.checkMoveValid(vir_square, steps[i], "black", steps[i])
         ) {
           this.getBoardSquare(steps[i]).toggleMoves();
         }
@@ -397,6 +444,230 @@ class BOARD {
         if (item.hasMoves()) {
           item.toggleMoves();
         }
+      }
+    }
+  }
+
+  /** arr: is the square where the king might possibly be. color: is the color of the opponents piece that checks your king */
+  isSquareChecked(arr, color) {
+    const vir_square = this.getBoardSquare(arr);
+
+    // Checks for knights targeting the king
+    const jumps = [
+      [vir_square.getXindex() + 1, vir_square.getYindex() + 2],
+      [vir_square.getXindex() + 2, vir_square.getYindex() + 1],
+      [vir_square.getXindex() + 2, vir_square.getYindex() - 1],
+      [vir_square.getXindex() + 1, vir_square.getYindex() - 2],
+      [vir_square.getXindex() - 1, vir_square.getYindex() - 2],
+      [vir_square.getXindex() - 2, vir_square.getYindex() - 1],
+      [vir_square.getXindex() - 2, vir_square.getYindex() + 1],
+      [vir_square.getXindex() - 1, vir_square.getYindex() + 2],
+    ];
+    for (let i = 0; i < jumps.length; i++) {
+      if (
+        this.isValidSquare(jumps[i]) &&
+        this.getBoardSquare(jumps[i]).getColor() == color &&
+        this.getBoardSquare(jumps[i]).getPiece() == "knight"
+      ) {
+        return true;
+      }
+    }
+
+    // Checks for diagonals targeting the king (pawns, bishop, queen, king)
+    for (let i = 0; i < 4; i++) {
+      var en_seq = true;
+      var vir_id = [vir_square.getXindex(), vir_square.getYindex()];
+      var initCheck = true;
+      var checkPawn = false;
+      while (en_seq) {
+        if (i == 0) {
+          vir_id = [vir_id[0] + 1, vir_id[1] + 1];
+          if (color == "black") {
+            checkPawn = true;
+          } else if (color == "white") {
+            checkPawn = false;
+          }
+        } else if (i == 1) {
+          vir_id = [vir_id[0] + 1, vir_id[1] - 1];
+          if (color == "black") {
+            checkPawn = false;
+          } else if (color == "white") {
+            checkPawn = true;
+          }
+        } else if (i == 2) {
+          vir_id = [vir_id[0] - 1, vir_id[1] - 1];
+          if (color == "black") {
+            checkPawn = false;
+          } else if (color == "white") {
+            checkPawn = true;
+          }
+        } else {
+          vir_id = [vir_id[0] - 1, vir_id[1] + 1];
+          if (color == "black") {
+            checkPawn = true;
+          } else if (color == "white") {
+            checkPawn = false;
+          }
+        }
+
+        if (color == "black") {
+          if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "none"
+          ) {
+            en_seq = true;
+          } else if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "black"
+          ) {
+            if (this.getBoardSquare(vir_id).getPiece() == "bishop") {
+              return true;
+            } else if (this.getBoardSquare(vir_id).getPiece() == "queen") {
+              return true;
+            }
+
+            if (initCheck) {
+              if (this.getBoardSquare(vir_id).getPiece() == "king") {
+                return true;
+              }
+              if (checkPawn) {
+                if (this.getBoardSquare(vir_id).getPiece() == "pawn") {
+                  return true;
+                }
+              }
+            }
+            en_seq = false;
+          } else {
+            en_seq = false;
+          }
+        } else if (color == "white") {
+          if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "none"
+          ) {
+            en_seq = true;
+          } else if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "white"
+          ) {
+            if (this.getBoardSquare(vir_id).getPiece() == "bishop") {
+              return true;
+            } else if (this.getBoardSquare(vir_id).getPiece() == "queen") {
+              return true;
+            }
+
+            if (initCheck) {
+              if (this.getBoardSquare(vir_id).getPiece() == "king") {
+                return true;
+              }
+              if (checkPawn) {
+                if (this.getBoardSquare(vir_id).getPiece() == "pawn") {
+                  return true;
+                }
+              }
+            }
+            en_seq = false;
+          } else {
+            en_seq = false;
+          }
+        }
+
+        initCheck = false;
+      }
+    }
+
+    // Checks for horizontal/vertical targeting the king (rook, queen, king)
+    for (let i = 0; i < 4; i++) {
+      var en_seq = true;
+      var vir_id = [vir_square.getXindex(), vir_square.getYindex()];
+      var initCheck = true;
+      while (en_seq) {
+        if (i == 0) {
+          vir_id = [vir_id[0], vir_id[1] + 1];
+        } else if (i == 1) {
+          vir_id = [vir_id[0] + 1, vir_id[1]];
+        } else if (i == 2) {
+          vir_id = [vir_id[0], vir_id[1] - 1];
+        } else {
+          vir_id = [vir_id[0] - 1, vir_id[1]];
+        }
+
+        if (color == "black") {
+          if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "none"
+          ) {
+            en_seq = true;
+          } else if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "black"
+          ) {
+            if (this.getBoardSquare(vir_id).getPiece() == "rook") {
+              return true;
+            } else if (this.getBoardSquare(vir_id).getPiece() == "queen") {
+              return true;
+            }
+
+            if (initCheck && this.getBoardSquare(vir_id).getPiece() == "king") {
+              return true;
+            }
+            en_seq = false;
+          } else {
+            en_seq = false;
+          }
+        } else if (color == "white") {
+          if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "none"
+          ) {
+            en_seq = true;
+          } else if (
+            this.isValidSquare(vir_id) &&
+            this.getBoardSquare(vir_id).getColor() == "white"
+          ) {
+            if (this.getBoardSquare(vir_id).getPiece() == "rook") {
+              return true;
+            } else if (this.getBoardSquare(vir_id).getPiece() == "queen") {
+              return true;
+            }
+
+            if (initCheck && this.getBoardSquare(vir_id).getPiece() == "king") {
+              return true;
+            }
+            en_seq = false;
+          } else {
+            en_seq = false;
+          }
+        }
+
+        initCheck = false;
+      }
+    }
+  }
+
+  checkMoveValid(vir_square, targetSquare, opponentColor, kingPos) {
+    this.getBoardSquare(targetSquare).setTempColor(vir_square.getColor());
+    vir_square.setTempColor("none");
+
+    if (opponentColor == "black") {
+      if (this.isSquareChecked(kingPos, opponentColor)) {
+        this.getBoardSquare(targetSquare).resetTempColor();
+        vir_square.resetTempColor();
+        return false;
+      } else {
+        this.getBoardSquare(targetSquare).resetTempColor();
+        vir_square.resetTempColor();
+        return true;
+      }
+    } else if (opponentColor == "white") {
+      if (this.isSquareChecked(kingPos, opponentColor)) {
+        this.getBoardSquare(targetSquare).resetTempColor();
+        vir_square.resetTempColor();
+        return false;
+      } else {
+        this.getBoardSquare(targetSquare).resetTempColor();
+        vir_square.resetTempColor();
+        return true;
       }
     }
   }
