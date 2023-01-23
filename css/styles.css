@@ -27,9 +27,6 @@ body {
   align-items: center;
 }
 
-/* container {
-} */
-
 .game-title {
   top: 0;
   background-color: var(--bg-black-100);
@@ -39,6 +36,53 @@ body {
   margin-bottom: 20px;
 }
 
+.alert {
+  position: absolute;
+  background-color: darkslategrey;
+  font-size: 20px;
+  color: white;
+  top: 42vh;
+  left: 38vw;
+  border-radius: 20%;
+  border: 2px solid aqua;
+  text-align: center;
+  padding: 20px;
+  height: 190px;
+  z-index: 5;
+}
+
+.button-box {
+  position: relative;
+  background-color: darkcyan;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid cyan;
+  width: 50px;
+  height: 50px;
+}
+
+.promote {
+  width: 300px;
+  left: 40vw;
+}
+
+.promote .button-box {
+  margin: 5px;
+  margin-top: 25px;
+}
+
+.button-box h1 {
+  font-family: sans-serif;
+}
+
+.button-box h2 {
+  font-family: sans-serif;
+}
+
+.button-box i {
+  font-size: 30px;
+}
+
 .board {
   background-color: darkcyan;
   max-width: 640px;
@@ -46,7 +90,8 @@ body {
   width: 100%;
   height: 100%;
   margin: 0;
-  position: relative;
+  position: absolute;
+  top: 100px;
 }
 
 .hidden {
@@ -66,33 +111,101 @@ body {
   border: 1px solid white;
 }
 
-.container1 {
+.left-container .top {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: wheat;
+  background-color: var(--bg-black-900);
+  color: darkcyan;
   width: 400px;
   padding: 20px;
   margin: 0;
   height: 200px;
-  position: relative;
-  border-radius: 40%;
-  border: 10px solid cadetblue;
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  border-radius: 2%;
+  border: 2px solid white;
+  opacity: 0.6;
 }
 
-.container1 h1 {
+.left-container .top h1 {
   font-family: sans-serif;
   font-style: italic;
   text-align: center;
+  position: relative;
 }
 
-.container2 {
-  background-color: green;
+.left-container .bottom {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-black-900);
+  color: darkcyan;
   width: 400px;
-  padding: 0;
+  padding: 20px;
   margin: 0;
-  height: 200px;
-  position: relative;
+  height: 420px;
+  position: absolute;
+  top: 320px;
+  left: 20px;
+  border-radius: 2%;
+  border: 2px solid white;
+  opacity: 0.6;
+}
+
+.left-container .bottom h1 {
+  text-align: center;
+  font-size: 50px;
+  border-bottom: 3px solid grey;
+  padding: 10px;
+}
+
+.left-container .bottom p {
+  text-align: left;
+  margin-top: 80px;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  background-color: var(--bg-black-900);
+  color: white;
+  width: 400px;
+  padding: 20px;
+  margin: 0;
+  height: 640px;
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  border-radius: 1%;
+  border: 2px solid white;
+  opacity: 0.6;
+}
+
+.right-container p {
+  height: 580px;
+}
+
+.right-container input {
+  width: 280px;
+  padding: 3px;
+  margin: 5px;
+  border-radius: 2px;
+}
+
+.right-container .submit-button {
+  width: 70px;
+  height: 25px;
+  padding: 0px;
+  margin: 5px;
+  border-radius: 2px;
+  font-size: 16px;
+  text-align: center;
+  justify-content: center;
+  background-color: darkcyan;
 }
 
 .w-sq {

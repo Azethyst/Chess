@@ -18,12 +18,38 @@
       <div class="game-title">
         <h1>Chess</h1>
       </div>
+      <div class="alert game-over hidden">
+        <h2>Game Over White Wins</h2>
+        <h1>1 - 1</h1>
+        <div class="row">
+          <div class="button-box"><i class="fa fa-home"></i></div>
+          <div class="button-box"><i class="fa fa-play"></i></div>
+        </div>
+      </div>
+      <div class="alert promote hidden">
+        <h2>Pawn Promoted</h2>
+        <div class="row">
+          <div class="button-box"><i class="fas fa-chess-queen"></i></div>
+          <div class="button-box"><i class="fas fa-chess-bishop"></i></div>
+          <div class="button-box"><i class="fas fa-chess-knight"></i></div>
+          <div class="button-box"><i class="fas fa-chess-rook"></i></div>
+        </div>
+      </div>
       <div class="row">
-        <div class="container1">
-          <h1>
-            It's <span class="" id="w-span">white</span
-            ><span class="hidden" id="b-span">black</span>'s turn to move...
-          </h1>
+        <div class="left-container">
+          <div class="top">
+            <h1>
+              It's <span class="" id="w-span">white</span
+              ><span class="hidden" id="b-span">black</span>'s turn to move...
+            </h1>
+          </div>
+          <div class="bottom">
+            <h1>0 - 0</h1>
+            <p>
+              Hi, This is a sample chess game create using HTML, CSS, and
+              Javascript! -Brix
+            </p>
+          </div>
         </div>
         <div class="board">
           <div class="row">
@@ -299,7 +325,13 @@
             </div>
           </div>
         </div>
-        <div class="container2">Mintsoe retord</div>
+        <div class="right-container">
+          <p class="messages">Messages...</p>
+          <div class="row">
+            <input type="text" />
+            <div class="submit-button">submit</div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- ====== JS Files ===== -->
