@@ -58,6 +58,8 @@ class SQUARE {
     if (this.color == "none") {
       this.square.classList.remove(this.square.classList[2]);
     } else {
+      this.square.classList.remove("white");
+      this.square.classList.remove("black");
       this.square.classList.add(newColor);
     }
   }
@@ -69,6 +71,11 @@ class SQUARE {
         .querySelector("i")
         .classList.remove(this.square.querySelector("i").classList[1]);
     } else {
+      if (this.square.querySelector("i").classList.length == 2) {
+        this.square
+        .querySelector("i")
+        .classList.remove(this.square.querySelector("i").classList[1]);
+      }
       this.square.querySelector("i").classList.add("fa-chess-" + newPiece);
     }
   }

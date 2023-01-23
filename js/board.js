@@ -21,12 +21,23 @@ class BOARD {
    * -----------------------------------------
    */
   constructor(selected = null) {
+    this.enablePromote();
     this.board = this.boardResetValue();
     this.selected = selected;
     this.blackKingPos = [5, 8];
     this.whiteKingPos = [5, 1];
     this.turn = true; // white = true, black = false
-  }
+    this.promotionSquare = null;
+
+    this.castleIndicators = {
+      blackKing: true,
+      rightBlackRook: true,
+      leftBlackRook: true,
+      whiteKing: true,
+      rightWhiteRook: true,
+      leftWhiteRook: true
+    };
+  } 
 
   getBoardSquare(arr) {
     return this.board[arr[0] - 1][arr[1] - 1];
@@ -58,8 +69,14 @@ class BOARD {
           this.whiteKingPos[1] = arr[1];
         }
       }
-      this.getBoardSquare(arr).movePiece(this.getBoardSquare(this.selected));
-      this.removeSelected();
+      // this.getBoardSquare(arr).movePiece(this.getBoardSquare(this.selected));
+      if (this.getBoardSquare(this.selected).getPiece() == "pawn" && arr[1] == 8) {
+        this.promotionSquare = arr;
+        document.querySelector(".promotion").classList.remove("hidden");
+      } else {
+        this.getBoardSquare(arr).movePiece(this.getBoardSquare(this.selected));
+        this.removeSelected();
+      }
       this.turn = !this.turn;
     } else if (this.selected == null) {
       this.selected = arr;
@@ -1121,5 +1138,45 @@ class BOARD {
     this.blackKingPos = [5, 8];
     this.whiteKingPos = [5, 1];
     this.turn = true; // white = true, black = false
+
+    this.castleIndicators = {
+      blackKing: true,
+      rightBlackRook: true,
+      leftBlackRook: true,
+      whiteKing: true,
+      rightWhiteRook: true,
+      leftWhiteRook: true
+    };
+  }
+
+  enablePromote() {
+    document.querySelector(".promote-queen").addEventListener("click", () => {
+      this.getBoardSquare(this.selected).setPiece("queen");
+      document.querySelector(".promotion").classList.add("hidden");
+      this.getBoardSquare(this.promotionSquare).movePiece(this.getBoardSquare(this.selected));
+      this.removeSelected();
+      this.promotionSquare = null;
+    })
+    document.querySelector(".promote-knight").addEventListener("click", () => {
+      this.getBoardSquare(this.selected).setPiece("knight");
+      document.querySelector(".promotion").classList.add("hidden");
+      this.getBoardSquare(this.promotionSquare).movePiece(this.getBoardSquare(this.selected));
+      this.removeSelected();
+      this.promotionSquare = null;
+    })
+    document.querySelector(".promote-bishop").addEventListener("click", () => {
+      this.getBoardSquare(this.selected).setPiece("bishop");
+      document.querySelector(".promotion").classList.add("hidden");
+      this.getBoardSquare(this.promotionSquare).movePiece(this.getBoardSquare(this.selected));
+      this.removeSelected();
+      this.promotionSquare = null;
+    })
+    document.querySelector(".promote-rook").addEventListener("click", () => {
+      this.getBoardSquare(this.selected).setPiece("rook");
+      document.querySelector(".promotion").classList.add("hidden");
+      this.getBoardSquare(this.promotionSquare).movePiece(this.getBoardSquare(this.selected));
+      this.removeSelected();
+      this.promotionSquare = null;
+    })
   }
 }
