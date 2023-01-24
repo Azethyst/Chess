@@ -5,6 +5,7 @@ class SQUARE {
     this.square = document.getElementById(this.xIndex + " " + this.yIndex);
     this.selected = false;
     this.moves = false;
+    this.enPassant = false;
     this.prevColor = null;
 
     // color => "black", "white", "none"

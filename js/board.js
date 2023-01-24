@@ -28,6 +28,7 @@ class BOARD {
     this.whiteKingPos = [5, 1];
     this.turn = true; // white = true, black = false
     this.promotionSquare = null;
+    this.passantSquare = null;
 
     this.castleIndicators = {
       blackKing: true,
@@ -111,10 +112,42 @@ class BOARD {
         }
       }
 
+      // Enable Passant 
+      if (
+        this.getBoardSquare(this.selected).getPiece() == "pawn" && 
+        ((this.selected[1] == 2 &&
+        arr[1] == 4) || (this.selected[1] == 7 &&
+        arr[1] == 5))
+      ) {
+        if (this.passantSquare != null) {
+          this.passantSquare.enPassant = false;
+        }
+        this.passantSquare = this.getBoardSquare(arr);
+        this.passantSquare.enPassant = true;
+      } else {
+        if (this.passantSquare != null) {
+          this.passantSquare.enPassant = false;
+        }
+      }
+
+      // Eat Passant
+      if (
+        this.getBoardSquare(this.selected).getPiece() == "pawn" && 
+        this.selected[0] != arr[0] &&
+        this.getBoardSquare(arr).getColor() == "none" &&
+        this.getBoardSquare(arr).getPiece() == "none"
+      ) {
+        if (this.getBoardSquare(this.selected).getColor() == "white") {
+          this.getBoardSquare([arr[0], arr[1]-1]).removePiece();
+        } else if (this.getBoardSquare(this.selected).getColor() == "black") {
+          this.getBoardSquare([arr[0], arr[1]+1]).removePiece();
+        }
+      }
+
       // Promotion
       if (
         this.getBoardSquare(this.selected).getPiece() == "pawn" &&
-        arr[1] == 8
+        (arr[1] == 8 || arr[1] == 1)
       ) {
         this.promotionSquare = arr;
         document.querySelector(".promotion").classList.remove("hidden");
@@ -207,12 +240,62 @@ class BOARD {
     ) {
       this.getBoardSquare(left).toggleMoves();
     }
+
     if (
       this.isValidSquare(right) &&
       this.getBoardSquare(right).getColor() == oppColor &&
       this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
     ) {
       this.getBoardSquare(right).toggleMoves();
+    }
+
+    // enPassant Control
+    if (vir_square.getColor() == "white" && vir_square.getYindex() == 5) {
+      const right_passant = [vir_square.getXindex() + 1, vir_square.getYindex()];
+      const left_passant = [vir_square.getXindex() - 1, vir_square.getYindex()];
+      // check right
+      if (
+        this.isValidSquare(right_passant) &&
+        this.isValidSquare(right) &&
+        this.getBoardSquare(right_passant).getColor() == "black" &&
+        this.getBoardSquare(right_passant).enPassant == true && 
+        this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
+        ) {
+          this.getBoardSquare(right).toggleMoves();
+        }
+      // check left
+      if (
+        this.isValidSquare(left_passant) &&
+        this.isValidSquare(left) &&
+        this.getBoardSquare(left_passant).getColor() == "black" &&
+        this.getBoardSquare(left_passant).enPassant == true && 
+        this.checkMoveValid(vir_square, left, oppColor, tempKingPos)
+        ) {
+          this.getBoardSquare(left).toggleMoves();
+        }
+    } else if (vir_square.getColor() == "black" && vir_square.getYindex() == 4) {
+      const right_passant = [vir_square.getXindex() + 1, vir_square.getYindex()];
+      const left_passant = [vir_square.getXindex() - 1, vir_square.getYindex()];
+      // check right
+      if (
+        this.isValidSquare(right_passant) &&
+        this.isValidSquare(right) &&
+        this.getBoardSquare(right_passant).getColor() == "white" &&
+        this.getBoardSquare(right_passant).enPassant == true && 
+        this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
+        ) {
+          this.getBoardSquare(right).toggleMoves();
+        }
+      // check left
+      if (
+        this.isValidSquare(left_passant) &&
+        this.isValidSquare(left) &&
+        this.getBoardSquare(left_passant).getColor() == "white" &&
+        this.getBoardSquare(left_passant).enPassant == true && 
+        this.checkMoveValid(vir_square, left, oppColor, tempKingPos)
+        ) {
+          this.getBoardSquare(left).toggleMoves();
+        }
     }
   }
 
@@ -417,7 +500,6 @@ class BOARD {
         }
       }
     }
-    console.log("hi from king");
     // Add Castle Moves
     const whiteSquaresLeft = [
       [2, 1],
@@ -867,6 +949,55 @@ class BOARD {
               this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
             ) {
               counter += 1;
+            } 
+
+            // enPassant Control
+            if (vir_square.getColor() == "white" && vir_square.getYindex() == 5) {
+              const right_passant = [vir_square.getXindex() + 1, vir_square.getYindex()];
+              const left_passant = [vir_square.getXindex() - 1, vir_square.getYindex()];
+              // check right
+              if (
+                this.isValidSquare(right_passant) &&
+                this.isValidSquare(right) &&
+                this.getBoardSquare(right_passant).getColor() == "black" &&
+                this.getBoardSquare(right_passant).enPassant == true && 
+                this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
+                ) {
+                  counter += 1;
+                }
+              // check left
+              if (
+                this.isValidSquare(left_passant) &&
+                this.isValidSquare(left) &&
+                this.getBoardSquare(left_passant).getColor() == "black" &&
+                this.getBoardSquare(left_passant).enPassant == true && 
+                this.checkMoveValid(vir_square, left, oppColor, tempKingPos)
+                ) {
+                  counter += 1;
+                }
+            } else if (vir_square.getColor() == "black" && vir_square.getYindex() == 4) {
+              const right_passant = [vir_square.getXindex() + 1, vir_square.getYindex()];
+              const left_passant = [vir_square.getXindex() - 1, vir_square.getYindex()];
+              // check right
+              if (
+                this.isValidSquare(right_passant) &&
+                this.isValidSquare(right) &&
+                this.getBoardSquare(right_passant).getColor() == "white" &&
+                this.getBoardSquare(right_passant).enPassant == true && 
+                this.checkMoveValid(vir_square, right, oppColor, tempKingPos)
+                ) {
+                  counter += 1;
+                }
+              // check left
+              if (
+                this.isValidSquare(left_passant) &&
+                this.isValidSquare(left) &&
+                this.getBoardSquare(left_passant).getColor() == "white" &&
+                this.getBoardSquare(left_passant).enPassant == true && 
+                this.checkMoveValid(vir_square, left, oppColor, tempKingPos)
+                ) {
+                  counter += 1;
+                }
             }
           } else if (vir_square.getPiece() == "knight") {
             // knight
@@ -1255,10 +1386,8 @@ class BOARD {
       }
     }
     if (counter == 0) {
-      console.log("check mate true");
       return true;
     } else {
-      console.log("check mate false");
       return false;
     }
   }
