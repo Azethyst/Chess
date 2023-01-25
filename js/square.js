@@ -74,8 +74,8 @@ class SQUARE {
     } else {
       if (this.square.querySelector("i").classList.length == 2) {
         this.square
-        .querySelector("i")
-        .classList.remove(this.square.querySelector("i").classList[1]);
+          .querySelector("i")
+          .classList.remove(this.square.querySelector("i").classList[1]);
       }
       this.square.querySelector("i").classList.add("fa-chess-" + newPiece);
     }
