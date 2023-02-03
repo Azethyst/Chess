@@ -38,13 +38,13 @@ body {
 
 .alert {
   position: absolute;
-  background-color: darkslategrey;
+  background-color: var(--bg-black-100);
   font-size: 20px;
   color: white;
   top: 42vh;
   left: 38vw;
   border-radius: 20%;
-  border: 2px solid aqua;
+  border: 2px solid var(--bg-black-50);
   text-align: center;
   padding: 20px;
   height: 190px;
@@ -56,14 +56,14 @@ body {
   background-color: darkcyan;
   padding: 8px;
   border-radius: 5px;
-  border: 2px solid cyan;
+  outline: 2px solid cyan;
   width: 50px;
   height: 50px;
 }
 
 .promotion {
   width: 300px;
-  left: 40vw;
+  left: calc(50vw - 150px);
 }
 
 .promotion .button-box {
@@ -108,7 +108,7 @@ body {
 }
 
 .square:hover {
-  border: 1px solid white;
+  outline: 1px solid white;
 }
 
 .left-container {
@@ -127,7 +127,7 @@ body {
   margin: 0;
   height: 200px;
   border-radius: 2%;
-  border: 2px solid white;
+  outline: 2px solid white;
   opacity: 0.6;
 }
 
@@ -150,7 +150,7 @@ body {
   margin-top: 20px;
   height: 420px;
   border-radius: 2%;
-  border: 2px solid white;
+  outline: 2px solid white;
   opacity: 0.6;
 }
 
@@ -182,7 +182,7 @@ body {
   top: 100px;
   right: 20px;
   border-radius: 1%;
-  border: 2px solid white;
+  outline: 2px solid white;
   opacity: 0.6;
 }
 
@@ -232,7 +232,7 @@ i {
 
 .selected {
   padding: 0;
-  border: 3px solid white;
+  outline: 3px solid white;
   text-align: center;
   z-index: 4;
 }
@@ -252,7 +252,7 @@ i {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 1px dotted grey;
+  outline: 1px dotted grey;
   opacity: 0.5;
   background-color: grey;
 }
@@ -262,6 +262,16 @@ i {
     display: block;
     margin-left: auto;
     margin-right: auto;
+  }
+  .alert h2 {
+    font-size: 25px;
+  }
+  .alert h1 {
+    font-size: 30px;
+  }
+  .game-over {
+    width: 50vw;
+    left: 25vw;
   }
   .left-container {
     display: block;
@@ -289,5 +299,66 @@ i {
   }
   .right-container .submit-button {
     width: 120px;
+  }
+}
+
+@media (max-width: 660px) {
+  .board {
+    width: 95vw;
+    height: 95vw;
+  }
+  .square {
+    height: calc((95vw / 8));
+    width: calc((95vw / 8));
+    padding: 2vw;
+  }
+  .alert h2 {
+    font-size: 6vw;
+  }
+  .game-over h2 {
+    font-size: 4vw;
+  }
+  .game-over h1 {
+    font-size: 6vw;
+  }
+  i {
+    font-size: 8vw;
+  }
+  .button-box {
+    width: 9vw;
+    height: 9vw;
+  }
+  .button-box i {
+    font-size: 6vw;
+  }
+  .moves {
+    top: 4vw;
+    left: 4vw;
+    width: 4vw;
+    height: 4vw;
+  }
+  .selected i {
+    top: 0px;
+    padding-bottom: 4vw;
+    font-size: 9vw;
+  }
+  .left-container {
+    display: block;
+    width: 95vw;
+    top: calc(100vw + 180px);
+  }
+  .right-container {
+    width: 95vw;
+    top: calc(100vw + 900px);
+  }
+  .right-container input {
+    width: 60vw;
+  }
+  .right-container .submit-button {
+    width: 20vw;
+  }
+  .promotion {
+    width: 50vw;
+    left: 25vw;
   }
 }
